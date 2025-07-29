@@ -19,13 +19,13 @@ export const flightServices = createApi({
     getAllNearAirports: builder.query<AirportNearLocationResponse, { params: AirportsNearLocationSearchParams }>({
       query: ({ params }) => {
         const newParams = setParams(params);
-        return `${FLIGHT_URL_PATH.get_near_by_airports}?${newParams}`;
+        return `${FLIGHT_URL_PATH.get_near_by_airports}?${newParams.toString()}`;
       },
     }),
     getAllAirports: builder.query<AirportNearLocationResponse, { params: AirportsSearchParams }>({
       query: ({ params }) => {
         const newParams = setParams(params);
-        return `${FLIGHT_URL_PATH.get_airports}?${newParams}`;
+        return `${FLIGHT_URL_PATH.get_airports}?${newParams.toString()}`;
       },
     }),
     getAllFlights: builder.query<FlightListResponse, { params: FlightsSearchParams }>({

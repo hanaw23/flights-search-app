@@ -27,7 +27,7 @@
       "@flights-search-app/services": ["./src/services/index.ts"],
       "@flights-search-app/utils": ["./src/utils/index.ts"],
       "@flights-search-app/context": ["./src/context/index.ts"],
-      "@flights-search-app/hook": ["./src/hook/index.ts"]
+      "@flights-search-app/hooks": ["./src/hooks/index.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
