@@ -84,6 +84,8 @@ const Home = () => {
                 <div className="h-12 bg-slate-200 rounded w-full" />
                 <div className="h-10 bg-slate-300 rounded w-1/4 mx-auto mt-6" />
               </div>
+            ) : errorGetNearAirport ? (
+              <Alert severity="error">{errorGetNearAirport}</Alert>
             ) : (
               <SearchFlightFormComponent currentUserLocation={nearAirportLocationData} locale={userLocaleData?.data?.id} userConfigData={userConfigData?.data} submit={submitNavigateToFlightsPage} />
             )}
