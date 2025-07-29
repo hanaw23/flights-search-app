@@ -32,7 +32,7 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
         const userCurrentLocation = response.data.find((item) => item.country === userLocation?.country);
 
         setUserConfigData({
-          data: userCurrentLocation ?? defaultLocation,
+          data: userCurrentLocation || defaultLocation,
           isLoading: false,
           error: null,
         });
@@ -59,7 +59,7 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
         const userLocale = response.data.find((item) => item.id === userConfigData.data.market);
 
         setUserLocaleData({
-          data: userLocale ?? defaultLocale,
+          data: userLocale || defaultLocale,
           isLoading: false,
           error: null,
         });
