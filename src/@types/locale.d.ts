@@ -31,16 +31,15 @@ interface UserCurrentLocation {
 }
 
 // CONTEXT INTERFACES
-interface BaseData<T> {
-  data: T;
+interface BaseData {
   error: string;
   isLoading: boolean;
 }
 
-interface ConfigData extends BaseData {
+interface ConfigData extends Omit<BaseData> {
   data: Config;
 }
-interface LocaleData extends BaseData {
+interface LocaleData extends Omit<BaseData> {
   data: Locale;
 }
 

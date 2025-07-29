@@ -15,8 +15,8 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
   const [ConfigTrigger] = useLazyGetAllConfigsQuery();
   const [LocaleTrigger] = useLazyGetAllLocalesQuery();
 
-  const [userConfigData, setUserConfigData] = useState();
-  const [userLocaleData, setUserLocaleData] = useState();
+  const [userConfigData, setUserConfigData] = useState<ConfigData>();
+  const [userLocaleData, setUserLocaleData] = useState<LocaleData>();
   const [userCurrentLocationData, setUserCurrentLocationData] = useState<UserCurrentLocation>();
 
   const getConfigLocation = useCallback(async () => {
