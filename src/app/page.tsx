@@ -6,7 +6,7 @@ import { SearchFlightFormComponent } from "@flights-search-app/components";
 import { useLazyGetAllNearAirportsQuery } from "@flights-search-app/services/flight_services";
 
 const Home = () => {
-  const { userCurrentLocationData, userLocaleData } = useContext(HeaderContext);
+  const { userCurrentLocationData, userLocaleData, userConfigData } = useContext(HeaderContext);
   const [getAllNearAirportsTrigger] = useLazyGetAllNearAirportsQuery();
   const [nearAirportLocationData, setNearAirportLocationData] = useState<{
     value: {
@@ -54,7 +54,7 @@ const Home = () => {
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center  p-8 gap-16 sm:p-80">
-      <SearchFlightFormComponent currentUserLocation={nearAirportLocationData} locale={userLocaleData?.data?.id} />
+      <SearchFlightFormComponent currentUserLocation={nearAirportLocationData} locale={userLocaleData?.data?.id} userConfigData={userConfigData?.data} />
     </div>
   );
 };

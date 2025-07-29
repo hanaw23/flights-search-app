@@ -23,7 +23,15 @@ interface SearchFlightFormProps {
     label: string;
   };
   locale?: string;
+  userConfigData?: Config;
 }
+
+const classOptions = [
+  { value: "economy", label: "Economy" },
+  { value: "premium_economy", label: "Premium Economy" },
+  { value: "busines", label: "Business" },
+  { value: "first", label: "First" },
+];
 
 const SearchFlightForm = (props: SearchFlightFormProps) => {
   const [from, setFrom] = useState();
@@ -31,7 +39,7 @@ const SearchFlightForm = (props: SearchFlightFormProps) => {
   const [to, setTo] = useState("");
   const [toDisplay, setToDisplay] = useState("");
   const [departDate, setDepartDate] = useState<Dayjs | null>(today);
-  const [travelClass, setTravelClass] = useState("business");
+  const [travelClass, setTravelClass] = useState("economy");
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
@@ -41,8 +49,22 @@ const SearchFlightForm = (props: SearchFlightFormProps) => {
     setShowErrors(true);
     if (!from || !to || !departDate) return;
 
-    // will delete
-    console.log({ from, to, departDate, travelClass, adults, children, infants });
+    const formattedDepartDate = dayjs(departDate).format("YYYY-MM-DD");
+    const params = {
+      originSkyId: from.skyId,
+      destinationSkyId: to.skyId,
+      originEntityId: from.entityId,
+      destinationEntityId: to.entityId,
+      date: formattedDepartDate,
+      cabinClass: travelClass,
+      adults: adults,
+      children: children,
+      infants: infants,
+      sortBy: "best",
+      currency: props?.userConfigData?.currency,
+      market: props?.userConfigData?.market,
+      countryCode: props?.userConfigData?.countryCode,
+    };
   };
 
   return (
@@ -97,10 +119,11 @@ const SearchFlightForm = (props: SearchFlightFormProps) => {
           <FormControl sx={{ minWidth: 120 }}>
             <InputLabel id="class-label">Class</InputLabel>
             <Select labelId="class-label" value={travelClass} label="Class" onChange={(e) => setTravelClass(e.target.value)}>
-              <MenuItem value="economy">Economy</MenuItem>
-              <MenuItem value="premium">Premium</MenuItem>
-              <MenuItem value="business">Business</MenuItem>
-              <MenuItem value="first">First</MenuItem>
+              {classOptions.map((el) => (
+                <MenuItem key={el.value} value={el.value}>
+                  {el.label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 

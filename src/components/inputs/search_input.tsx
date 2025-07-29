@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { helpers } from "@flights-search-app/utils";
 import { TextField, CircularProgress, MenuItem } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import IconButton from "@mui/material/IconButton";
 import { useLazyGetAllAirportsQuery } from "@flights-search-app/services/flight_services";
 
 interface Airport {
@@ -26,6 +28,7 @@ const { debounce } = helpers;
 
 const SearchInput = ({ label, onSelect, initialValue, error, helperText, locale }: SearchInputProps) => {
   const [labelValue, setLabelValue] = useState<string>("");
+  const [tempSelectedlabelValue, setTempSelectedLabelValue] = useState<string>("");
   const [options, setOptions] = useState<Airport[]>([]);
   const [getSearchAirportsTrigger] = useLazyGetAllAirportsQuery();
   const [loadingSearchAirports, setLoadingSearchAirports] = useState(false);
@@ -34,10 +37,14 @@ const SearchInput = ({ label, onSelect, initialValue, error, helperText, locale 
   const debouncedSearch = useRef<(query: string) => void>();
 
   useEffect(() => {
-    if (initialValue?.value && initialValue?.label) {
-      setLabelValue(initialValue?.label);
+    if (tempSelectedlabelValue && tempSelectedlabelValue !== initialValue?.label) {
+      setLabelValue(tempSelectedlabelValue);
+    } else if (initialValue?.label && !tempSelectedlabelValue) {
+      setLabelValue(initialValue.label);
+    } else {
+      setLabelValue("");
     }
-  }, [initialValue]);
+  }, [initialValue, tempSelectedlabelValue]);
 
   useEffect(() => {
     debouncedSearch.current = debounce(async (query: string) => {
@@ -74,11 +81,12 @@ const SearchInput = ({ label, onSelect, initialValue, error, helperText, locale 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
+    setLabelValue(input);
     debouncedSearch.current?.(input);
   };
 
   const handleSelect = (airport: Airport) => {
-    setLabelValue(airport.label);
+    setTempSelectedLabelValue(airport.label);
     onSelect(airport);
     setOptions([]);
   };
@@ -93,7 +101,23 @@ const SearchInput = ({ label, onSelect, initialValue, error, helperText, locale 
         error={error}
         helperText={helperText}
         InputProps={{
-          endAdornment: loadingSearchAirports ? <CircularProgress size={20} /> : null,
+          endAdornment: (
+            <>
+              {labelValue && (
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setLabelValue("");
+                    setOptions([]);
+                    onSelect?.(null);
+                  }}
+                >
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              )}
+              {loadingSearchAirports && <CircularProgress size={20} />}
+            </>
+          ),
         }}
         placeholder="Enter country, city, or location"
       />
