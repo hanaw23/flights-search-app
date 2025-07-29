@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@flights-search-app/*": ["./src/*"],
+      "@flights-search-app/containers": ["./src/containers/index.tsx"],
+      "@flights-search-app/constants": ["./src/constants/index.ts"],
+      "@flights-search-app/components": ["./src/components/index.tsx"],
+      "@flights-search-app/stores": ["./src/stores/*"],
+      "@flights-search-app/services": ["./src/services/index.ts"],
+      "@flights-search-app/utils": ["./src/utils/index.ts"],
+      "@flights-search-app/context": ["./src/context/index.ts"],
+      "@flights-search-app/hook": ["./src/hook/index.ts"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
