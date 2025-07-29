@@ -36,10 +36,10 @@ interface BaseData {
   isLoading: boolean;
 }
 
-interface ConfigData extends Omit<BaseData> {
+interface ConfigData extends BaseData {
   data: Config;
 }
-interface LocaleData extends Omit<BaseData> {
+interface LocaleData extends BaseData {
   data: Locale;
 }
 

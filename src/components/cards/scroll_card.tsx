@@ -31,8 +31,7 @@ const ScrollCard = ({ params }: ScrollCardProps) => {
     setLoading(true);
     try {
       const response = await getAllFlightsTrigger({ params }).unwrap();
-      const flights = response?.data?.itineraries ?? [];
-      setAllFlights(flights);
+      setAllFlights(response?.data?.itineraries ?? []);
     } catch (err) {
       setError(`Failed to fetch flights: ${err.data.message}`);
     } finally {

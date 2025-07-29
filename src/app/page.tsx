@@ -35,8 +35,8 @@ const Home = () => {
     try {
       const response = await getAllNearAirportsTrigger({
         params: {
-          lng: userCurrentLocationData.longitude,
-          lat: userCurrentLocationData.latitude,
+          lng: userCurrentLocationData.longitude.toString(),
+          lat: userCurrentLocationData.latitude.toString(),
           locale: userLocaleData.data.id,
         },
       }).unwrap();
@@ -44,14 +44,14 @@ const Home = () => {
       if (response?.data) {
         setNearAirportLocationData({
           value: {
-            skyId: response?.data?.current?.navigation?.relevantFlightParams?.skyId,
-            entityId: response?.data?.current?.navigation?.relevantFlightParams?.entityId,
+            skyId: response?.data?.current?.navigation?.relevantFlightParams?.skyId.toString(),
+            entityId: response?.data?.current?.navigation?.relevantFlightParams?.entityId.toString(),
           },
           label: `${response?.data?.current?.navigation?.relevantFlightParams?.localizedName} (${response?.data?.current?.navigation?.relevantFlightParams?.skyId})`,
         });
       }
-    } catch (e) {
-      setErrorGetNearAirport(`Error fetching nearby airports: ${e.data.message}`);
+    } catch (err) {
+      setErrorGetNearAirport("Error fetching nearby airports");
     }
     setLoadingNearAirport(false);
   }, [getAllNearAirportsTrigger, userCurrentLocationData?.latitude, userCurrentLocationData?.longitude, userLocaleData?.data?.id]);
@@ -84,8 +84,6 @@ const Home = () => {
                 <div className="h-12 bg-slate-200 rounded w-full" />
                 <div className="h-10 bg-slate-300 rounded w-1/4 mx-auto mt-6" />
               </div>
-            ) : errorGetNearAirport ? (
-              <Alert severity="error">{errorGetNearAirport}</Alert>
             ) : (
               <SearchFlightFormComponent currentUserLocation={nearAirportLocationData} locale={userLocaleData?.data?.id} userConfigData={userConfigData?.data} submit={submitNavigateToFlightsPage} />
             )}
