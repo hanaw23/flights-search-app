@@ -30,7 +30,7 @@ interface SearchFlightFormProps {
 const classOptions = [
   { value: "economy", label: "Economy" },
   { value: "premium_economy", label: "Premium Economy" },
-  { value: "busines", label: "Business" },
+  { value: "business", label: "Business" },
   { value: "first", label: "First" },
 ];
 

@@ -41,7 +41,7 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
       setUserConfigData({
         ...userConfigData,
         isLoading: false,
-        error: err,
+        error: err.data.message,
       });
     }
   }, [ConfigTrigger, userLocation?.country]);
@@ -68,7 +68,7 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
       setUserLocaleData({
         ...userLocaleData,
         isLoading: false,
-        error: err,
+        error: err.data.message,
       });
     }
   }, [LocaleTrigger, userConfigData]);
@@ -87,6 +87,7 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
   }, [getLocaleLocation, userConfigData, userLocation]);
 
   const isLoading = userConfigData?.isLoading || userLocaleData?.isLoading;
+  const isError = userConfigData?.error || userLocaleData?.error;
 
   return (
     <HeaderContext.Provider
@@ -98,34 +99,35 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
         userCurrentLocationData,
       }}
     >
-      <div className="flex justify-end w-full px-6 pt-4 bg-slate-950 z-[999]">
-        <div className="backdrop-blur-sm bg-white/90 rounded-2xl shadow-md p-4 flex flex-wrap gap-6 items-center text-sm md:text-base min-h-[56px]">
-          {isLoading ? (
-            <>
-              <Skeleton variant="circular" width={40} height={40} />
-              <Skeleton variant="text" width={120} height={24} />
-              <Skeleton variant="text" width={100} height={24} />
-            </>
-          ) : (
-            <>
-              <div className="flex items-center gap-2">
-                <Image src="/logo.png" alt="Plane Icon" width={40} height={40} priority />
-              </div>
-              <div className="flex items-center gap-2">
-                <PublicIcon fontSize="small" />
-                <span>{userConfigData?.data?.country}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <AttachMoneyIcon fontSize="small" />
-                <span>
-                  {userConfigData?.data?.currencySymbol} {userConfigData?.data?.currency}
-                </span>
-              </div>
-            </>
-          )}
+      {!isError && (
+        <div className="flex justify-end w-full px-6 pt-4 bg-slate-950 z-[999]">
+          <div className="backdrop-blur-sm bg-white/90 rounded-2xl shadow-md p-4 flex flex-wrap gap-6 items-center text-sm md:text-base min-h-[56px]">
+            {isLoading ? (
+              <>
+                <Skeleton variant="circular" width={40} height={40} />
+                <Skeleton variant="text" width={120} height={24} />
+                <Skeleton variant="text" width={100} height={24} />
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <Image src="/logo.png" alt="Plane Icon" width={40} height={40} priority />
+                </div>
+                <div className="flex items-center gap-2">
+                  <PublicIcon fontSize="small" />
+                  <span>{userConfigData?.data?.country}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <AttachMoneyIcon fontSize="small" />
+                  <span>
+                    {userConfigData?.data?.currencySymbol} {userConfigData?.data?.currency}
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-
+      )}
       {!isLoading && children}
     </HeaderContext.Provider>
   );

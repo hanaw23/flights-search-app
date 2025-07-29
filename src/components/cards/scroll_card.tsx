@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import FlightCardComponent from "@flights-search-app/components/cards/flights_card";
 import { useLazyGetAllFlightsQuery } from "@flights-search-app/services/flight_services";
-import { Skeleton } from "@mui/material";
+import { Skeleton, Alert } from "@mui/material";
 
 interface ScrollCardProps {
   params: FlightsSearchParams;
@@ -34,7 +34,7 @@ const ScrollCard = ({ params }: ScrollCardProps) => {
       const flights = response?.data?.itineraries ?? [];
       setAllFlights(flights);
     } catch (err) {
-      setError("Failed to fetch flights.");
+      setError(`Failed to fetch flights: ${err.data.message}`);
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,9 @@ const ScrollCard = ({ params }: ScrollCardProps) => {
           <FlightCardSkeleton />
         </>
       ) : error ? (
-        <p className="text-center text-red-500">{error}</p>
+        <Alert severity="error" className="mt-10 sm:mt-50">
+          {error}
+        </Alert>
       ) : (
         allFlights.map((val, index) => <FlightCardComponent key={index} data={val} />)
       )}
