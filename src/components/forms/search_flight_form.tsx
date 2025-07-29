@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card, Box, Select, MenuItem, IconButton, InputLabel, FormControl, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -9,7 +10,6 @@ import ChildCareIcon from "@mui/icons-material/ChildCare";
 import BabyChangingStationIcon from "@mui/icons-material/BabyChangingStation";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
 import { SearchInputComponent } from "@flights-search-app/components";
 
 const today = dayjs();
@@ -24,6 +24,7 @@ interface SearchFlightFormProps {
   };
   locale?: string;
   userConfigData?: Config;
+  submit: (params: FlightsSearchParams) => void;
 }
 
 const classOptions = [
@@ -45,6 +46,14 @@ const SearchFlightForm = (props: SearchFlightFormProps) => {
   const [infants, setInfants] = useState(0);
   const [showErrors, setShowErrors] = useState(false);
 
+  useEffect(() => {
+    if (from && from !== props?.currentUserLocation?.value) {
+      setFrom(from);
+    } else if (props?.currentUserLocation?.value && !from) {
+      setFrom(props?.currentUserLocation?.value);
+    }
+  }, [from, props?.currentUserLocation?.value]);
+
   const handleSubmit = () => {
     setShowErrors(true);
     if (!from || !to || !departDate) return;
@@ -64,7 +73,8 @@ const SearchFlightForm = (props: SearchFlightFormProps) => {
       currency: props?.userConfigData?.currency,
       market: props?.userConfigData?.market,
       countryCode: props?.userConfigData?.countryCode,
-    };
+    } as FlightsSearchParams;
+    props.submit(params);
   };
 
   return (
@@ -77,6 +87,8 @@ const SearchFlightForm = (props: SearchFlightFormProps) => {
           width: "100%",
           flexWrap: "wrap",
           gap: 2,
+          backgroundColor: "transparent",
+          boxShadow: "none",
         }}
       >
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, alignItems: "center", flexGrow: 1 }}>
@@ -174,9 +186,20 @@ const SearchFlightForm = (props: SearchFlightFormProps) => {
         </Box>
 
         <Box sx={{ ml: "auto" }}>
-          <IconButton color="primary" onClick={handleSubmit}>
-            <SearchIcon />
-            <Typography>Search</Typography>
+          <IconButton
+            onClick={handleSubmit}
+            sx={{
+              backgroundColor: "#1976d2",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#1565c0",
+              },
+              px: 2,
+              borderRadius: 2,
+            }}
+          >
+            <SearchIcon sx={{ mr: 1 }} />
+            <Typography variant="button">Search</Typography>
           </IconButton>
         </Box>
       </Card>

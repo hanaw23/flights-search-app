@@ -1,8 +1,11 @@
 "use client";
 
 import { createContext, useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { useGeolocation } from "@flights-search-app/hooks";
-import { CustomCardComponent } from "@flights-search-app/components";
+import PublicIcon from "@mui/icons-material/Public";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import Skeleton from "@mui/material/Skeleton";
 import { useLazyGetAllConfigsQuery, useLazyGetAllLocalesQuery } from "@flights-search-app/services/locale_services";
 
 export const HeaderContext = createContext<HeaderContextType>({} as HeaderContextType);
@@ -83,15 +86,47 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [getLocaleLocation, userConfigData, userLocation]);
 
+  const isLoading = userConfigData?.isLoading || userLocaleData?.isLoading;
+
   return (
-    <HeaderContext.Provider value={{ userConfigData, userLocaleData, setUserConfigData, setUserLocaleData, userCurrentLocationData }}>
-      <div className="fixed z-[999] bg-white w-full top-0 shadow-lg shadow-slate-600/10 px-6">
-        <div className="flex items-end gap-4 flex-row">
-          <CustomCardComponent title={userLocaleData?.data?.text} />
-          <CustomCardComponent title={userConfigData?.data?.country} description={`${userConfigData?.data?.currencySymbol} ${userConfigData?.data?.currency}`} />
+    <HeaderContext.Provider
+      value={{
+        userConfigData,
+        userLocaleData,
+        setUserConfigData,
+        setUserLocaleData,
+        userCurrentLocationData,
+      }}
+    >
+      <div className="flex justify-end w-full px-6 pt-4 bg-slate-950 z-[999]">
+        <div className="backdrop-blur-sm bg-white/90 rounded-2xl shadow-md p-4 flex flex-wrap gap-6 items-center text-sm md:text-base min-h-[56px]">
+          {isLoading ? (
+            <>
+              <Skeleton variant="circular" width={40} height={40} />
+              <Skeleton variant="text" width={120} height={24} />
+              <Skeleton variant="text" width={100} height={24} />
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2">
+                <Image src="/logo.png" alt="Plane Icon" width={40} height={40} priority />
+              </div>
+              <div className="flex items-center gap-2">
+                <PublicIcon fontSize="small" />
+                <span>{userConfigData?.data?.country}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <AttachMoneyIcon fontSize="small" />
+                <span>
+                  {userConfigData?.data?.currencySymbol} {userConfigData?.data?.currency}
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
-      {children}
+
+      {!isLoading && children}
     </HeaderContext.Provider>
   );
 };
