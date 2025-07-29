@@ -22,3 +22,32 @@ interface ConfigResponseData extends BaseMeta {
 
 type LocaleResponse = LocaleResponseData;
 type ConfigResponse = ConfigResponseData;
+
+// HOOKS LOCATION
+interface UserCurrentLocation {
+  longitude: number;
+  latitude: number;
+  country?: string;
+}
+
+// CONTEXT INTERFACES
+interface BaseData<T> {
+  data: T;
+  error: string;
+  isLoading: boolean;
+}
+
+interface ConfigData extends BaseData {
+  data: Config;
+}
+interface LocaleData extends BaseData {
+  data: Locale;
+}
+
+interface HeaderContextType {
+  userConfigData: ConfigData;
+  setUserConfigData: React.Dispatch<React.SetStateAction<ConfigData>>;
+  setUserLocaleData: React.Dispatch<React.SetStateAction<LocaleData>>;
+  userLocaleData: LocaleData;
+  userCurrentLocationData: UserCurrentLocation;
+}
